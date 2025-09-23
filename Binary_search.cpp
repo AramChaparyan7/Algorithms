@@ -1,18 +1,19 @@
 #include <vector>
 #include <iostream>
+#include <list>
 
-template <typename ForwardIt, class T = typename std::iterator_traits<ForwardIt>::value_type>
-bool BinarySearch(ForwardIt fisrt, ForwardIt last, const T& val) {
-    ForwardIt left = fisrt;
-    ForwardIt right = last;
-    while(left != std::next(right)) {
-        ForwardIt mid = left;
+template <typename BidirIt, class T = typename std::iterator_traits<BidirIt>::value_type>
+bool BinarySearch(BidirIt first, BidirIt last, const T& val) {
+    BidirIt left = first;
+    BidirIt right = last;
+    while(left != right) {
+        BidirIt mid = left;
         std::advance(mid, std::distance(left, right)/2);
         if(*mid == val) {
             return true;
         } 
         if(*mid > val) {
-            right = std::prev(mid);
+            right = mid;
         }
         else{
             left = std::next(mid);
@@ -21,25 +22,30 @@ bool BinarySearch(ForwardIt fisrt, ForwardIt last, const T& val) {
     return false;
 }
 
-template <typename ForwardIt, class T = typename std::iterator_traits<ForwardIt>::value_type>
-bool BinarySearchRec(ForwardIt left, ForwardIt right, const T& val) {
-    ForwardIt mid = left;
+template <typename BidirIt, class T = typename std::iterator_traits<BidirIt>::value_type>
+bool BinarySearchRec(BidirIt left, BidirIt right, const T& val) {
+    BidirIt mid = left;
     std::advance(mid, std::distance(left, right)/2);
     if(*mid == val) {
         return true;
     }
+    if(left==right) {
+        return false;
+    }
     if(*mid < val) {
-        return BinarySearchRec(left + 1, right,  val);
+        return BinarySearchRec(std::next(left), right,  val);
     }
     if(*mid > val) {
-        return BinarySearchRec(left, right - 1,  val);
+        return BinarySearchRec(left, right,  val);
     }
-    return - 1;
+    return 0;
 }
 
 int main() {
     std::vector<int>  vec{1, 5, 6, 9, 15, 20};
+    std::list<int>  ls{1, 5, 6, 7, 9, 15, 20};
     std::cout << BinarySearch(vec.begin(), vec.end(), 6) << std::endl;
     std::cout << BinarySearchRec(vec.begin(), vec.end(), 9) << std::endl;
+    std::cout << BinarySearch(ls.begin(), ls.end(), 7) << std::endl;
     return 0;
 }

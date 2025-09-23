@@ -1,15 +1,12 @@
 #include <vector>
 #include <iostream>
 
-template <typename ForwardIt, class T = typename std::iterator_traits<ForwardIt>::value_type>
-void BubbleSort(ForwardIt first, ForwardIt last){
-    bool swaped = true;
-    while(swaped) {
-        swaped = false;
-        for(ForwardIt it = first; std::next(it) != last; ++it) {
+template <typename RandomIt, class T = typename std::iterator_traits<RandomIt>::value_type>
+void BubbleSort(RandomIt first, RandomIt last){
+    for(RandomIt fi = first; fi != last; ++fi) {
+        for(RandomIt it = first; it != last - (fi - first) - 1; ++it) {
             if(*it > *std::next(it)) {
                 std::swap(*it, *std::next(it));
-                swaped = true;
             }
         }
     }
